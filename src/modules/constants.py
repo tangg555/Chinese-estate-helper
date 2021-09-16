@@ -52,7 +52,7 @@ class LianJiaConsts(object):
 
                }
 
-    HEADER = {
+    HEADERS = {
         'Host': 'ajax.lianjia.com',
         'Referer': 'https://sh.lianjia.com/ditu/',
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_0) AppleWebKit/537.36 '

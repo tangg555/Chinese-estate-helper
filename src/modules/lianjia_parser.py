@@ -13,18 +13,15 @@ from .cache import LocalCache
 class LianJiaParser(object):
     _class_name = "LianJia Api Parser"
 
-    def __init__(self, city, cache_enable=True, cache_dir=CACHE_DIR, log_path=''):
+    def __init__(self, cache_enable=True, cache_dir=CACHE_DIR, log_path=''):
         self.city_dict = LianJiaConsts.CITY_DICT
-        self.city_id = self.city_dict[city]['city_id']
-        self.city = city
-
         self.url_fang = LianJiaConsts.HOUSE_AJAX_GET_TEMPLATE
 
         self.url = LianJiaConsts.AJAX_GET_TEMPLATE
 
         self.cookies = LianJiaConsts.COOKIES
 
-        self.headers = LianJiaConsts.HEADER
+        self.headers = LianJiaConsts.HEADERS
 
         self.gen_md5 = ParserTools.generate_md5
 
@@ -38,19 +35,19 @@ class LianJiaParser(object):
             self.cache = None
 
     def get_authorization(self, dict_) -> str:
-        city_id = dict_["city_id"],
-        group_type = dict_["group_type"],
-        max_lat = dict_["max_lat"],
-        max_lng = dict_["max_lng"],
-        min_lat = dict_["min_lat"],
-        min_lng = dict_["min_lng"],
-        request_ts = dict_["request_ts"]
-        data_string = f"vfkpbin1ix2rb88gfjebs0f60cbvhedlcity_id={city_id}group_type={group_type}max_lat={max_lat}" \
-                      f"max_lng={max_lng}min_lat={min_lat}min_lng={min_lng}request_ts={request_ts}"
-        authorization = self.gen_md5(data_string)
+        data_str = "vfkpbin1ix2rb88gfjebs0f60cbvhedlcity_id={city_id}group_type={group_type}max_lat={max_lat}" \
+                   "max_lng={max_lng}min_lat={min_lat}min_lng={min_lng}request_ts={request_ts}".format(
+                    city_id=dict_["city_id"],
+                    group_type=dict_["group_type"],
+                    max_lat=dict_["max_lat"],
+                    max_lng=dict_["max_lng"],
+                    min_lat=dict_["min_lat"],
+                    min_lng=dict_["min_lng"],
+                    request_ts=dict_["request_ts"])
+        authorization = self.gen_md5(data_str)
         return authorization
 
-    def get_district_info(self) -> list:
+    def get_district_info(self, city) -> list:
         """
         :str max_lat: 最大经度 六位小数str型max_lat='40.074766'
         :str min_lat: 最小经度 六位小数str型min_lat='39.609408'
@@ -69,16 +66,19 @@ class LianJiaParser(object):
         .........
         """
         time_13 = int(round(time.time() * 1000))
-        authorization = LianJiaParser(self.city).get_authorization(
-            {'group_type': 'district', 'city_id': self.city_id, 'max_lat': self.city_dict[self.city]['max_lat'],
-             'min_lat': self.city_dict[self.city]['min_lat'],
-             'max_lng': self.city_dict[self.city]['max_lng'], 'min_lng': self.city_dict[self.city]['min_lng'],
+        authorization = self.get_authorization(
+            {'group_type': 'district',
+             'city_id': self.city_dict[city]['city_id'],
+             'max_lat': self.city_dict[city]['max_lat'],
+             'min_lat': self.city_dict[city]['min_lat'],
+             'max_lng': self.city_dict[city]['max_lng'],
+             'min_lng': self.city_dict[city]['min_lng'],
              'request_ts': time_13})
 
         url = self.url % (
-            self.city_id, 'district', self.city_dict[self.city]['max_lat'], self.city_dict[self.city]['min_lat'],
-            self.city_dict[self.city]['max_lng'], self.city_dict[self.city]['min_lng'], '%7B%7D', time_13,
-            authorization, time_13)
+            self.city_dict[city]['city_id'], 'district', self.city_dict[city]['max_lat'],
+            self.city_dict[city]['min_lat'], self.city_dict[city]['max_lng'], self.city_dict[city]['min_lng'],
+            '%7B%7D', time_13, authorization, time_13)
 
         with requests.Session() as sess:
             ret = sess.get(url=url, headers=self.headers, cookies=self.cookies)
@@ -92,24 +92,25 @@ class LianJiaParser(object):
             else:
                 return None
 
-    def get_community_info(self, max_lat, min_lat, max_lng, min_lng) -> list:
+    def get_community_info(self, city, max_lat, min_lat, max_lng, min_lng) -> list:
         """
-        :str max_lat: 最大经度 六位小数str型max_lat='40.074766'
-        :str min_lat: 最小经度 六位小数str型min_lat='39.609408'
-        :str max_lng: 最大纬度 六位小数str型max_lng='40.074766'
-        :str min_lng: 最小纬度 六位小数str型min_lng='39.609408'
-        :str city_id: 北京:110000  上海:310000
-        #获取区域内在售小区的信息#例如上海市的陈湾小区ID地理位置平均价格在售套数
+        :param city: String 如：上海
+        :param max_lat: String 最大经度 六位小数str型max_lat='40.074766'
+        :param min_lat: String 最小经度 六位小数str型min_lat='39.609408'
+        :param max_lng: String 最大纬度 六位小数str型max_lng='40.074766'
+        :param min_lng: String 最小纬度 六位小数str型min_lng='39.609408'
         :return: list
-        [{'id': '5011000012693', 'name': '陈湾小区', 'longitude': 121.455211, 'latitude': 30.966981, 'unit_price': 24407, 'count': 9}]
+        e.g.
+        [{'id': '5011000012693', 'name': '陈湾小区', 'longitude': 121.455211, 'latitude': 30.966981,
+        'unit_price': 24407, 'count': 9}]
         """
-
+        city_id = self.city_dict[city]['city_id']
         time_13 = int(round(time.time() * 1000))
-        authorization = LianJiaParser(self.city).get_authorization(
-            {'group_type': 'community', 'city_id': self.city_id, 'max_lat': max_lat, 'min_lat': min_lat,
+        authorization = self.get_authorization(
+            {'group_type': 'community', 'city_id': city_id, 'max_lat': max_lat, 'min_lat': min_lat,
              'max_lng': max_lng, 'min_lng': min_lng, 'request_ts': time_13})
         url = self.url % (
-            self.city_id, 'community', max_lat, min_lat, max_lng, min_lng, '%7B%7D', time_13, authorization, time_13)
+            city_id, 'community', max_lat, min_lat, max_lng, min_lng, '%7B%7D', time_13, authorization, time_13)
         with requests.Session() as sess:
             ret = sess.get(url=url, headers=self.headers, cookies=self.cookies)
             house_json = json.loads(ret.text[43:-1])
@@ -141,7 +142,7 @@ class LianJiaParser(object):
                 try:
                     for x in house_json['data']['ershoufang_info']['list']:
                         ll.append(house_json['data']['ershoufang_info']['list'][x])
-                except:
+                except Exception:
                     self.logger.warning(house_json)
 
         return ll

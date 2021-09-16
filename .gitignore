@@ -1,6 +1,6 @@
 .idea
 .DS_Store
-.db
+*.db
 log
 download
 toy

@@ -4,14 +4,15 @@ import tqdm
 from .lianjia_parser import LianJiaParser
 from .constants import LianJiaConsts
 
-
 class LianjiaSqliteDownloader(object):
+    parser = LianJiaParser()
+    
     @classmethod
     def save_city_border_to_db(cls, city):
         """
         保存city的所有区域边缘经纬度并保存在目录下district.db文件内
         """
-        ret = LianJiaParser(city).get_district_info()
+        ret = cls.parser.get_district_info(city)
         conn = sqlite3.connect('district.db')  # 链接数据库
         cursor = conn.cursor()
 
@@ -65,7 +66,7 @@ class LianjiaSqliteDownloader(object):
             pbar = tqdm.tqdm(li)
             for x in pbar:
 
-                ret = LianJiaParser(city).get_community_info(x[0], x[1], x[2], x[3])
+                ret = cls.parser.get_community_info(city, x[0], x[1], x[2], x[3])
 
                 if ret is not None:
                     for z in ret:
@@ -99,7 +100,7 @@ class LianjiaSqliteDownloader(object):
 
         pbar = tqdm.tqdm(area_list)
         for x in pbar:
-            ret = LianJiaParser(city).get_house_info(x[0], x[1])
+            ret = cls.parser.get_house_info(city, x[0], x[1])
             with sqlite3.connect('DetailInfo.db') as conn:
                 cursor = conn.cursor()
                 for y in ret:
