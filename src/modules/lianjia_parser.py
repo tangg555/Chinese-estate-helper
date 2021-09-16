@@ -47,7 +47,7 @@ class LianJiaParser(object):
         authorization = self.gen_md5(data_str)
         return authorization
 
-    def get_district_info(self, city) -> list:
+    def get_districts(self, city) -> list:
         """
         :str max_lat: 最大经度 六位小数str型max_lat='40.074766'
         :str min_lat: 最小经度 六位小数str型min_lat='39.609408'
@@ -86,13 +86,13 @@ class LianJiaParser(object):
             house_json = json.loads(ret.text[43:-1])
 
             if house_json['errno'] == 0:
-
-                return house_json['data']['list'].values()
+                districts = house_json['data']['list'].values()
+                return districts
 
             else:
-                return None
+                return []
 
-    def get_community_info(self, city, max_lat, min_lat, max_lng, min_lng) -> list:
+    def get_communities(self, city, max_lat, min_lat, max_lng, min_lng) -> list:
         """
         :param city: String 如：上海
         :param max_lat: String 最大经度 六位小数str型max_lat='40.074766'
@@ -123,11 +123,10 @@ class LianJiaParser(object):
                 else:
                     return house_json['data']['list']
             else:
-                return None
+                return []
 
-    def get_house_info(self, id, count) -> list:
-
-        ll = []
+    def get_houses(self, id, count) -> list:
+        house_infos = []
         for page in range(1, math.ceil(count / 10) + 1):
             time_13 = int(round(time.time() * 1000))
             authorization = self.gen_md5(
@@ -139,10 +138,6 @@ class LianJiaParser(object):
 
                 house_json = json.loads(ret.text[41:-1])
 
-                try:
-                    for x in house_json['data']['ershoufang_info']['list']:
-                        ll.append(house_json['data']['ershoufang_info']['list'][x])
-                except Exception:
-                    self.logger.warning(house_json)
-
-        return ll
+                for x in house_json['data']['ershoufang_info']['list']:
+                    house_infos.append(house_json['data']['ershoufang_info']['list'][x])
+        return house_infos

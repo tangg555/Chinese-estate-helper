@@ -1,15 +1,15 @@
-from src.modules.lianjia_sqlite import LianjiaSqliteDownloader
+from src.modules.lianjia_sqlite import LianJiaSqlite
 
 
-class LianjiaSqliteTask(object):
+class LianJiaSqliteTask(object):
     @classmethod
     def run(cls):
-        downloader = LianjiaSqliteDownloader()
+        downloader = LianJiaSqlite()
         city = '上海'
-        downloader.save_city_border_to_db(city)
-        downloader.hole_city_down(city)
-        downloader.get_complete_housing_info(city)
+        downloader.save_districts(city)
+        downloader.save_communities(city)
+        downloader.save_communities(city)
 
 
 if __name__ == '__main__':
-    LianjiaSqliteTask.run()
+    LianJiaSqliteTask.run()

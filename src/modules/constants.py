@@ -6,6 +6,8 @@ CACHE_DIR = './cache'
 
 
 class LianJiaConsts(object):
+    LIANJIA_DB = 'lianjia'
+
     #     e.g.
     #     https://ajax.lianjia.com/map/search/ershoufang/?callback=jQuery111109719454800982295_1562045315950&
     #     city_id=410100&group_type=district&max_lat=34.961967&min_lat=34.473941&max_lng=113.50206&min_lng=112.899549&sug_id=&sug_type=&
@@ -59,8 +61,29 @@ class LianJiaConsts(object):
                       '(KHTML, like Gecko) Chrome/68.0.3440.106 Safari/537.36'
     }
 
-    DETAIL_INFO_CREATE_SQL_TEMPLATE = '''create table  if not exists %s (houseId PRIMARY KEY, 
-                houseCode, title, appid, source, imgSrc, layoutImgSrc, imgSrcUri,
+    DISTRICTS_CREATE_SQL_TEMPLATE = '''create table if not exists %s_district (
+                    id int PRIMARY KEY ,
+                    name text,
+                    longitude text,
+                    latitude text,
+                    border text,
+                    unit_price int,
+                    count int
+                    )'''
+
+    COMMUNITIES_CREATE_SQL_TEMPLATE = '''create table if not exists %s_community (
+                        id int PRIMARY KEY ,
+                        district text,
+                        name text,
+                        longitude text,
+                        latitude text,
+                        unit_price int,
+                        count int
+                        )'''
+
+    HOUSE_CREATE_SQL_TEMPLATE = '''create table if not exists %s_house (
+                houseId PRIMARY KEY, 
+                houseCode , title, appid, source, imgSrc, layoutImgSrc, imgSrcUri,
                 layoutImgSrcUri, roomNum, square, buildingArea, buildYear, isNew, ctime,
                 mtime, orientation, floorStat, totalFloor, decorateType, hbtName,
                 isYezhuComment, isGarage, houseType, isFocus, status, isValid, signTime,
@@ -71,7 +94,7 @@ class LianJiaConsts(object):
                 unitPrice, viewUrl, listPrice, publishTime, isVilla, villaNoFloorLevel,
                 villaName, tags)'''
 
-    DETAIL_INFO_INSERT_SQL_TEMPLATE = '''insert into %s(houseId,
+    HOUSE_INSERT_SQL_TEMPLATE = '''insert ignore into %s_house (houseId,
                 houseCode,title,appid,source,imgSrc,layoutImgSrc,imgSrcUri,
                 layoutImgSrcUri,roomNum,square,buildingArea,buildYear,isNew,ctime,
                 mtime,orientation,floorStat,totalFloor,decorateType,hbtName,
@@ -93,37 +116,26 @@ class LianJiaConsts(object):
                 :unitPrice,:viewUrl,:listPrice,:publishTime,:isVilla,:villaNoFloorLevel,
                 :villaName,:tags)'''
 
-
-    CITY_CREATE_SQL_TEMPLATE = '''create table if not exists %s (
-                    id int PRIMARY KEY ,
-                    name text,
-                    longitude text,
-                    latitude text,
-                    border text,
-                    unit_price int,
-                    count int
-                    )'''
-
     # request template
     AJAX_GET_TEMPLATE = 'https://ajax.lianjia.com/map/search/ershoufang/?callback=jQuery1111012389114747347363_1534230881479' \
-                            '&city_id=%s' \
-                            '&group_type=%s' \
-                            '&max_lat=%s' \
-                            '&min_lat=%s' \
-                            '&max_lng=%s' \
-                            '&min_lng=%s' \
-                            '&filters=%s' \
-                            '&request_ts=%d' \
-                            '&source=ljpc' \
-                            '&authorization=%s' \
-                            '&_=%d'
+                        '&city_id=%s' \
+                        '&group_type=%s' \
+                        '&max_lat=%s' \
+                        '&min_lat=%s' \
+                        '&max_lng=%s' \
+                        '&min_lng=%s' \
+                        '&filters=%s' \
+                        '&request_ts=%d' \
+                        '&source=ljpc' \
+                        '&authorization=%s' \
+                        '&_=%d'
 
     HOUSE_AJAX_GET_TEMPLATE = 'https://ajax.lianjia.com/map/resblock/ershoufanglist/?callback=jQuery11110617424919783834_1541868368031' \
-                                  '&id=%s' \
-                                  '&order=0' \
-                                  '&page=%d' \
-                                  '&filters=%s' \
-                                  '&request_ts=%d' \
-                                  '&source=ljpc' \
-                                  '&authorization=%s' \
-                                  '&_=%d'
+                              '&id=%s' \
+                              '&order=0' \
+                              '&page=%d' \
+                              '&filters=%s' \
+                              '&request_ts=%d' \
+                              '&source=ljpc' \
+                              '&authorization=%s' \
+                              '&_=%d'
