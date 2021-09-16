@@ -10,8 +10,8 @@ from tqdm import tqdm
 from logging import DEBUG
 from ABuilder.ABuilder import ABuilder
 from .lianjia_parser import LianJiaParser
-from src.modules.logger import MyLogger
-from src.modules.constants import LianJiaConsts
+from .logger import MyLogger
+from .constants import LianJiaConsts
 from src.configuration.mysql_cfg import MySQLCFG
 
 
@@ -81,19 +81,22 @@ class LianJiaMySQL(object):
                  "{unit_price}", "{district["count"]}")'
             sql_values.append(sql)
         bulk_sql = f''' 
-                  insert into {city}_district
+                  insert ignore into {city}_district
                   (id, name, longitude,latitude,border,unit_price,count)
                   values
                   {', '.join(sql_values)};
                   '''
-        self.logger.info("Sqls assembled......")
+        self.logger.info("bulk_sql组装完毕......")
         self.cursor.execute(bulk_sql)
         self.logger.info("Districts inserted......")
         self.db_close_with_commit()
 
     def insert_communities(self, city):
+        self.db_connect()
+
         areas = self.abuilder.table(f'{city}_district').field("border, name").query()
-        for area in areas:
+        self.logger.info(f"遍历{city}市的{len(areas)}个区域......")
+        for count, area in enumerate(areas):
             lat = []
             lng = []
             district_name = area["name"]
@@ -107,21 +110,25 @@ class LianJiaMySQL(object):
                 for y in numpy.arange(min(lat), max(lat), step):
                     squares.append((round(y, 6), round(y - step, 6), round(x, 6), round(x - step, 6)))
 
-            for square in squares:
-                communities = self..parser.get_communities(city, square[0], square[1], square[2], square[3])
+            sql_values = []
+            self.logger.info("Insert communities......")
+            for square in tqdm(squares, desc=f'{city}市 {district_name}区 组装communitie sqls中......'):
+                communities = self.parser.get_communities(city, square[0], square[1], square[2], square[3])
                 for community in communities:
-                    # try:
-                    #     sql = ''' insert into %s
-                    #              (id, name, district,longitude,latitude,unit_price,count)
-                    #              values
-                    #              (:id, :name, :district,:longitude, :latitude, :unit_price, :count)
-                    #              ''' % city
-                    #     community.update({'district': district_name})
-                    #     cursor.execute(sql, z)
-                    #     conn.commit()
-                    #
-                    #     pbar.set_description(district_name + community['name'] + '已导入')
-                    # except:
-                    #
-                    #     pbar.set_description(district_name + community['name'] + '住房已存在')
-                    pass
+                    unit_price = 0 if not community["unit_price"] else community["unit_price"]
+                    sql = f'("{community["id"]}", "{community["name"]}", "{community["longitude"]}", \
+                         "{community["latitude"]}", "{unit_price}", "{community["count"]}")'
+                    sql_values.append(sql)
+            bulk_sql = f''' 
+                      insert ignore into {city}_community
+                      (id, name, longitude, latitude, unit_price, count)
+                      values
+                      {', '.join(sql_values)};
+                      '''
+            self.logger.info("bulk_sql组装完毕......")
+            self.cursor.execute(bulk_sql)
+            self.logger.info("Communities inserted......")
+            # 提交事务:
+            self.conn.commit()
+            self.logger.info(f"遍历{city}市的{len(areas)}个区域， 完成进度{count + 1}/{len(areas)}")
+        self.db_close_without_commit()
