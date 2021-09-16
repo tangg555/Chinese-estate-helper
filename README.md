@@ -1,37 +1,29 @@
 # Chinese-estate-helper
 
-#### 介绍
+[![License: GPL](https://img.shields.io/badge/License-GPL-yellow.svg)](https://opensource.org/licenses/GPL)
+
+## 介绍
 爬取房产网站数据用作自用分析。
 
-#### 软件架构
-软件架构说明
+## 安装教程
 
+代码开发版本为Python 3.6，请自行安装。
 
-#### 安装教程
+## 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+下载代码，打开终端切换至代码的根目录。
+运行
+```python3
+pip install requirements.txt
+cd tasks
+python basic_task.py
+``` 
 
-#### 使用说明
+## 主要特性
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
+待开发中......
 
-#### 参与贡献
+## 提示
 
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+- 从链家获取数据接口的代码借鉴于[Lianjia](https://github.com/xjkj123/Lianjia) 。
+- 代码仅供学习与交流，不可商用。
