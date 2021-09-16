@@ -8,6 +8,7 @@ class LianJiaSqliteTask(object):
         city = '上海'
         # downloader.create_tables(city)
         # downloader.insert_districts(city)
+        downloader.insert_communities(city)
 
 
 
