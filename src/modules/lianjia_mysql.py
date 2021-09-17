@@ -115,7 +115,7 @@ class LianJiaMySQL(object):
             district_border = district_["border"]
             # 加载cache
             if self.cache_enable and district_name in self.cache['inserted_districts']:
-                self.logger.info(f"Communities of {district_name} have be inserted......")
+                self.logger.info(f"{district_name}区 的小区已在数据库中。")
                 continue
             for coordinate in district_border.split(';'):
                 lng.append(float(coordinate.split(',')[0]))
@@ -149,7 +149,7 @@ class LianJiaMySQL(object):
             community_name = community_['name']
             # 加载cache
             if self.cache_enable and community_name in self.cache['inserted_communities']:
-                self.logger.info(f"Houses of {community_name} have be inserted......")
+                self.logger.info(f"{city}市 {community_name}小区 的房子已在数据库中。")
                 continue
             houses = self.parser.get_houses(community_["id"], community_["count"])
             if not houses:
