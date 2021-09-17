@@ -36,7 +36,7 @@ class House(object):
         self.latitude = None
 
     def __repr__(self):
-        return f'f{self.city}市 {self.districtName}区 {self.communityName}小区 {self.title}'
+        return f'{self.city}市 {self.districtName}区 {self.communityName}小区 {self.title}'
 
 
 class HouseList(object):

@@ -19,8 +19,13 @@ class BasicTask(object):
         city = "上海"
         data = ABuilder().table(f'{city}_district').query()
         districts = cls.list_to_districts(data, city)
-        key_vals = [[one.name, one.unit_price] for one in districts.items()]
-        MapView.city_draw(city, key_vals)
+        MapView.districts_draw(city, districts)
+
+        data = ABuilder().table(f'{city}_district').where({'name': ['=', '闵行']}).query()
+        district = cls.list_to_districts(data, city).districts[0]
+        data = ABuilder().table(f'{city}_community').where({'district': ['=', '闵行']}).query()
+        communities = cls.list_to_communities(data, city)
+        MapView.communitiess_draw(city, district, communities)
 
     @classmethod
     def dict_to_house(cls, result: dict, city: str):

@@ -148,7 +148,6 @@ class LianJiaMySQL(object):
             community_name = community_['name']
             # 加载cache
             if self.cache_enable and community_name in self.cache['inserted_communities']:
-                self.logger.info(f"{city}市 {community_name}小区 的房子已在数据库中。")
                 continue
             houses = self.parser.get_houses(community_["id"], community_["count"])
             if not houses:

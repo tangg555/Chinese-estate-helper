@@ -21,7 +21,7 @@ class Community(object):
         self.count = community_['count']
 
     def __repr__(self):
-        return f'f{self.city}市 {self.district}区 {self.name}小区 '
+        return f'{self.city}市 {self.district}区 {self.name}小区 '
 
 
 class CommunityList(object):

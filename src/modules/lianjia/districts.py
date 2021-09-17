@@ -20,7 +20,7 @@ class District(object):
         self.count = district_['count']
 
     def __repr__(self):
-        return f'f{self.city}市 {self.name}区'
+        return f'{self.city}市 {self.name}区'
 
 
 class DistrictList(object):

@@ -2,7 +2,7 @@ requests==2.23.0
 numpy~=1.19.5
 tqdm==4.62.1
 PyMySQL==1.0.2
-branca-0.4.2
-folium-0.12.1
+branca
+folium
 cryptography
 a-sqlbuilder
