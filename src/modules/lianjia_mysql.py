@@ -12,7 +12,8 @@ from logging import DEBUG
 from ABuilder.ABuilder import ABuilder
 from .lianjia_parser import LianJiaParser
 from .logger import MyLogger
-from .constants import LianJiaConsts
+from .constants import LianJiaConsts, CACHE_DIR
+from .cache import LocalCache
 from src.common.file_tools import FileTools
 from src.configuration.mysql_cfg import MySQLCFG
 
@@ -20,10 +21,20 @@ from src.configuration.mysql_cfg import MySQLCFG
 class LianJiaMySQL(object):
     _class_name = "LianJia MySQL"
 
-    def __init__(self):
+    def __init__(self, cache_enable=True, cache_dir=CACHE_DIR):
         self.logger = MyLogger(self._class_name, DEBUG)
         self.parser = LianJiaParser()
         self.abuilder = ABuilder()
+        self.cache_enable = cache_enable
+        if self.cache_enable:
+            self.cache = LocalCache(self._class_name, cache_dir, self.logger)
+            self.cache.smart_load()
+            if 'inserted_districts' not in self.cache:
+                self.cache['inserted_districts'] = set()
+            if 'inserted_communities' not in self.cache:
+                self.cache['inserted_communities'] = set()
+        else:
+            self.cache = None
 
         self.conn = None
         self.cursor = None
@@ -102,6 +113,10 @@ class LianJiaMySQL(object):
             lng = []
             district_name = district_["name"]
             district_border = district_["border"]
+            # 加载cache
+            if self.cache_enable and district_name in self.cache['inserted_districts']:
+                self.logger.info(f"Communities of {district_name} have be inserted......")
+                continue
             for coordinate in district_border.split(';'):
                 lng.append(float(coordinate.split(',')[0]))
                 lat.append(float(coordinate.split(',')[1]))
@@ -110,29 +125,35 @@ class LianJiaMySQL(object):
             for x in numpy.arange(min(lng), max(lng), step):
                 for y in numpy.arange(min(lat), max(lat), step):
                     squares.append((round(y, 6), round(y - step, 6), round(x, 6), round(x - step, 6)))
-
             self.logger.info("Insert communities......")
             for square in tqdm(squares, desc=f'{city}市 {district_name}区 插入communitie sqls中......'):
                 communities = self.parser.get_communities(city, square[0], square[1], square[2], square[3])
                 for community in communities:
                     community["unit_price"] = 0 if not community["unit_price"] else community["unit_price"]
                     community.update({'district': district_name})
-                    table_name = '{city}_community'
+                    table_name = f'{city}_community'
                     if not self.abuilder.table(table_name).where({"id": ["=", community["id"]]}).first():
                         self.abuilder.table(table_name).insert(community)
             self.abuilder.commit()
             self.logger.info("Communities inserted......")
             self.logger.info(f"遍历{city}市的{len(district_list)}个区域， 完成进度{index + 1}/{len(district_list)}")
+            # 加载cache
+            self.cache['inserted_districts'].add(district_name)
+            self.cache.store()
         self.db_close_without_commit()
 
     def insert_houses(self, city):
         self.db_connect()
-        community_list = self.abuilder.table(f'{city}_community').field("id, count, name").query()
+        community_list = self.abuilder.table(f'{city}_community').field("id, count, name, district").query()
         for community_ in tqdm(community_list, desc=f"遍历{city}市的{len(community_list)}个小区......"):
+            community_name = community_['name']
+            # 加载cache
+            if self.cache_enable and community_name in self.cache['inserted_communities']:
+                self.logger.info(f"Houses of {community_name} have be inserted......")
+                continue
             houses = self.parser.get_houses(community_["id"], community_["count"])
             if not houses:
-                alert = f'\n{community_["district"]}区 {community_["name"]}小区 has no houses.'
-                self.logger.warning(alert)
+                alert = f'\n{community_["district"]}区 {community_name}小区暂无房子。'
                 FileTools.info_append_to_file(alert, 'log/insert_houses_info.txt')
             for house in houses:
                 house['house_video_info'] = str(house['house_video_info'])
@@ -153,4 +174,7 @@ class LianJiaMySQL(object):
                 if not self.abuilder.table(table_name).where({"houseId": ["=", house_to_insert["houseId"]]}).first():
                     self.abuilder.table(table_name).insert(house_to_insert)
             self.conn.commit()
+            # 加载cache
+            self.cache['inserted_communities'].add(community_name)
+            self.cache.store()
         self.db_close_without_commit()
