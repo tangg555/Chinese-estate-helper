@@ -2,12 +2,11 @@ import requests
 import time
 import json
 import math
-import os
 
-from .constants import LianJiaConsts, CACHE_DIR
+from src.common.constants import LianJiaConsts, CACHE_DIR
 from src.common.parser_tools import ParserTools
-from .logger import MyLogger, DEBUG
-from .cache import LocalCache
+from src.modules.logger import MyLogger, DEBUG
+from src.modules.cache import LocalCache
 
 
 class LianJiaParser(object):

@@ -3,7 +3,7 @@
 """
 
 CACHE_DIR = './cache'
-
+VIEW_DIR = './view'
 
 class LianJiaConsts(object):
     LIANJIA_DB = 'lianjia'

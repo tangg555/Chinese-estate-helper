@@ -1,6 +1,8 @@
 requests==2.23.0
-numpy==1.21.2
+numpy~=1.19.5
 tqdm==4.62.1
 PyMySQL==1.0.2
+pyecharts~=1.9.0
+simplejson-3.17.5
 cryptography
 a-sqlbuilder

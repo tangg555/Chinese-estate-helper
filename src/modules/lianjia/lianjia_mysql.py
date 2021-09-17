@@ -3,7 +3,6 @@
 ABuilder 对MySQL的链式操作
 https://github.com/lizhenggan/ABuilder
 """
-import os
 
 import numpy
 import pymysql
@@ -11,9 +10,9 @@ from tqdm import tqdm
 from logging import DEBUG
 from ABuilder.ABuilder import ABuilder
 from .lianjia_parser import LianJiaParser
-from .logger import MyLogger
-from .constants import LianJiaConsts, CACHE_DIR
-from .cache import LocalCache
+from src.modules.logger import MyLogger
+from src.common.constants import LianJiaConsts, CACHE_DIR
+from src.modules.cache import LocalCache
 from src.common.file_tools import FileTools
 from src.configuration.mysql_cfg import MySQLCFG
 

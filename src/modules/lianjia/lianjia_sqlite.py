@@ -2,7 +2,6 @@ import sqlite3
 import numpy
 import tqdm
 from .lianjia_parser import LianJiaParser
-from .constants import LianJiaConsts
 
 DISTRICTS_CREATE_SQLITE_TEMPLATE = '''create table if not exists %s (
                 id int PRIMARY KEY ,

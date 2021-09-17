@@ -1,4 +1,4 @@
-from src.modules.lianjia_sqlite import LianJiaSqlite
+from src.modules.lianjia.lianjia_sqlite import LianJiaSqlite
 
 
 class LianJiaSqliteTask(object):
