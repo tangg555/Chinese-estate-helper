@@ -6,9 +6,10 @@ class LianJiaSqliteTask(object):
     def run(cls):
         downloader = LianJiaMySQL()
         city = '上海'
-        # downloader.create_tables(city)
+        downloader.create_tables(city)
         # downloader.insert_districts(city)
-        downloader.insert_communities(city)
+        # downloader.insert_communities(city)
+        downloader.insert_houses(city)
 
 
 

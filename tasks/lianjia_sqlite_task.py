@@ -8,7 +8,7 @@ class LianJiaSqliteTask(object):
         city = '上海'
         downloader.save_districts(city)
         downloader.save_communities(city)
-        downloader.save_communities(city)
+        downloader.save_houses(city)
 
 
 if __name__ == '__main__':

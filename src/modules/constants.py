@@ -72,7 +72,7 @@ class LianJiaConsts(object):
                     )'''
 
     COMMUNITIES_CREATE_SQL_TEMPLATE = '''create table if not exists %s_community (
-                        id int PRIMARY KEY ,
+                        id varchar(20) PRIMARY KEY ,
                         district text,
                         name text,
                         longitude text,
@@ -81,18 +81,41 @@ class LianJiaConsts(object):
                         count int
                         )'''
 
+    # e.g. {'houseId': '107103138219', 'houseCode': '107103138219', 'title': '地铁五号线+封闭小区，精装修，采光好，配套设施齐全',
+    # 'appid': '104', 'source': 'link', 'imgSrc': 'https://image1.ljcdn.com/110000-inspection/pc1_r9NmDZgdQ_1.jpg.280x210.jpg',
+    # 'layoutImgSrc': 'https://image1.ljcdn.com/x-se/hdic-frame/standard_5fe0417c-d36b-4d9f-b793-55b5e9e720e2.png.280x210.jpg',
+    # 'imgSrcUri': 'https://image1.ljcdn.com/110000-inspection/pc1_r9NmDZgdQ_1.jpg',
+    # 'layoutImgSrcUri': 'https://image1.ljcdn.com/x-se/hdic-frame/standard_5fe0417c-d36b-4d9f-b793-55b5e9e720e2.png',
+    # 'roomNum': '2室2厅', 'square': 96.98, 'buildingArea': 96.98, 'buildYear': '1997年建', 'isNew': False,
+    # 'ctime': '2020-10-05', 'mtime': '2021-09-17', 'orientation': '南 北', 'floorStat': '高楼层', 'totalFloor': '6',
+    # 'decorateType': '精装', 'hbtName': '暂无数据', 'isYezhuComment': True, 'isGarage': False, 'houseType': '107500000003',
+    # 'isFocus': False, 'status': 'sell', 'isValid': 1, 'signTime': '1970.01.02', 'signSource': '链家成交',
+    # 'signSourceCn': '链家成交', 'isDisplay': 1, 'address': '新建西路101弄', 'community': 509821540057808,
+    # 'communityId': 509821540057808, 'communityName': '新建西路101弄',
+    # 'communityUrl': 'https://sh.lianjia.com/xiaoqu/509821540057808/',
+    # 'communityUrlEsf': 'https://sh.lianjia.com/ershoufang/c509821540057808/', 'districtId': 310120,
+    # 'districtUrl': 'https://sh.lianjia.com/ershoufang/fengxian/', 'districtName': '奉贤', 'regionId': 613000258,
+    # 'regionUrl': 'https://sh.lianjia.com/ershoufang/nanqiao/', 'regionName': '南桥', 'bbdName': '南桥',
+    # 'bbdUrl': 'https://sh.lianjia.com/ershoufang/nanqiao/', 'houseCityId': '310000', 'subwayInfo': '',
+    # 'schoolName': '', 'schoolArr': None, 'bizcircleFullSpell': 'fengxian', 'isVr': False, 'isVrFutureHome': True,
+    # 'isGoodHouse': '', 'isYezhuPay': False, 'new_house_status': 'zai_shou', 'new_price_str_unit': '万',
+    # 'new_unit_price_str_unit': '元/平', 'new_price_str': '170', 'new_unit_price_str': '17530', 'copy_writing': '暂无价格',
+    # 'house_video_info': '[]', 'price': 170, 'unitPrice': 17530, 'viewUrl': 'https://sh.lianjia.com/ershoufang/107103138219.html',
+    # 'listPrice': 170, 'publishTime': '11个月以前发布', 'isVilla': False, 'villaNoFloorLevel': False, 'villaName': '',
+    # 'tags': "[['isVrFutureHome', 'VR看装修'], ['five', '房本满两年']]"}
     HOUSE_CREATE_SQL_TEMPLATE = '''create table if not exists %s_house (
-                houseId PRIMARY KEY, 
-                houseCode , title, appid, source, imgSrc, layoutImgSrc, imgSrcUri,
-                layoutImgSrcUri, roomNum, square, buildingArea, buildYear, isNew, ctime,
-                mtime, orientation, floorStat, totalFloor, decorateType, hbtName,
-                isYezhuComment, isGarage, houseType, isFocus, status, isValid, signTime,
-                signSource, signSourceCn, isDisplay, address, community, communityId,
-                communityName, communityUrl, communityUrlEsf, districtId, districtUrl,
-                districtName, regionId, regionUrl, regionName, bbdName, bbdUrl, houseCityId,
-                subwayInfo, schoolName, schoolArr, bizcircleFullSpell, house_video_info , price,
-                unitPrice, viewUrl, listPrice, publishTime, isVilla, villaNoFloorLevel,
-                villaName, tags)'''
+                houseId varchar(20) PRIMARY KEY, 
+                houseCode text, title text, appid text, source text, imgSrc text, 
+                layoutImgSrc text, imgSrcUri text,
+                layoutImgSrcUri text, roomNum text, square text, buildingArea text, buildYear text, isNew boolean, ctime text,
+                mtime text, orientation text, floorStat text, totalFloor int, decorateType text, hbtName text,
+                isYezhuComment boolean, isGarage boolean, houseType text, isFocus boolean, status text, isValid int, signTime text,
+                signSource text, signSourceCn text, isDisplay int, address text, community varchar(20), communityId varchar(20),
+                communityName text, communityUrl text, communityUrlEsf text, districtId int, districtUrl text,
+                districtName text, regionId int, regionUrl text, regionName text, bbdName text, bbdUrl text, houseCityId text,
+                subwayInfo text, schoolName text, schoolArr text, bizcircleFullSpell text, house_video_info text, price int,
+                unitPrice int, viewUrl text, listPrice int, publishTime text, isVilla boolean, villaNoFloorLevel boolean,
+                villaName text, tags text)'''
 
     HOUSE_INSERT_SQL_TEMPLATE = '''insert ignore into %s_house (houseId,
                 houseCode,title,appid,source,imgSrc,layoutImgSrc,imgSrcUri,
@@ -102,9 +125,9 @@ class LianJiaConsts(object):
                 signSource,signSourceCn,isDisplay,address,community,communityId,
                 communityName,communityUrl,communityUrlEsf,districtId,districtUrl,
                 districtName,regionId,regionUrl,regionName,bbdName,bbdUrl,houseCityId,
-                subwayInfo,schoolName,schoolArr,bizcircleFullSpell,
-                house_video_info,price,
-                unitPrice,viewUrl,listPrice,publishTime,isVilla,villaNoFloorLevel,villaName,tags) values 
+                subwayInfo,schoolName,schoolArr,bizcircleFullSpell,house_video_info,price,
+                unitPrice,viewUrl,listPrice,publishTime,isVilla,villaNoFloorLevel,villaName,tags) 
+                values 
                 (:houseId,:houseCode,:title,:appid,:source,:imgSrc,:layoutImgSrc,:imgSrcUri,
                 :layoutImgSrcUri,:roomNum,:square,:buildingArea,:buildYear,:isNew,:ctime,
                 :mtime,:orientation,:floorStat,:totalFloor,:decorateType,:hbtName,
@@ -115,6 +138,7 @@ class LianJiaConsts(object):
                 :subwayInfo,:schoolName,:schoolArr,:bizcircleFullSpell,:house_video_info,:price,
                 :unitPrice,:viewUrl,:listPrice,:publishTime,:isVilla,:villaNoFloorLevel,
                 :villaName,:tags)'''
+
 
     # request template
     AJAX_GET_TEMPLATE = 'https://ajax.lianjia.com/map/search/ershoufang/?callback=jQuery1111012389114747347363_1534230881479' \

@@ -72,7 +72,7 @@ class LianJiaSqlite(object):
         conn = sqlite3.connect('districts.db')  # 链接数据库
         cursor = conn.cursor()
 
-        cursor.execute(DISTRICTS_CREATE_SQLITE_TEMPLATE % city)
+        cursor.execute(DISTRICTS_CREATE_SQLITE_TEMPLATE % city)  # 创建表
 
         pbar = tqdm.tqdm(districts)
         for district in tqdm.tqdm(pbar):
@@ -130,21 +130,20 @@ class LianJiaSqlite(object):
                                  (:id, :name, :district,:longitude, :latitude, :unit_price, :count)
                                  ''' % city
                         community.update({'district': district_name})
-                        cursor.execute(sql, z)
+                        cursor.execute(sql, community)
                         conn.commit()
 
                         pbar.set_description(district_name + community['name'] + '已导入')
                     except:
-
                         pbar.set_description(district_name + community['name'] + '住房已存在')
 
 
     @classmethod
-    def get_complete_housing_info(cls, city):
+    def save_houses(cls, city):
         """
         保存市区内所有在售楼盘的信息并保存在目录下LianJia_area.db文件内
         """
-        with sqlite3.connect('districts.db') as conn1:
+        with sqlite3.connect('houses.db') as conn1:
             cursor1 = conn1.cursor()
             cursor1.execute(HOUSE_CREATE_SQLITE_TEMPLATE % city)
 

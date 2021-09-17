@@ -137,7 +137,8 @@ class LianJiaParser(object):
                 ret = sess.get(url=url, headers=self.headers, cookies=self.cookies)
 
                 house_json = json.loads(ret.text[41:-1])
-
+                if not house_json['data'] or not house_json['data']['ershoufang_info']:
+                    return []
                 for x in house_json['data']['ershoufang_info']['list']:
                     house_infos.append(house_json['data']['ershoufang_info']['list'][x])
         return house_infos
