@@ -126,7 +126,7 @@ class LianJiaMySQL(object):
                 for y in numpy.arange(min(lat), max(lat), step):
                     squares.append((round(y, 6), round(y - step, 6), round(x, 6), round(x - step, 6)))
             self.logger.info("Insert communities......")
-            for square in tqdm(squares, desc=f'{city}市 {district_name}区 插入communitie sqls中......'):
+            for square in tqdm(squares, desc=f'{city}市 {district_name}区 插入{city}_community数据表中......'):
                 communities = self.parser.get_communities(city, square[0], square[1], square[2], square[3])
                 for community in communities:
                     community["unit_price"] = 0 if not community["unit_price"] else community["unit_price"]
@@ -145,7 +145,7 @@ class LianJiaMySQL(object):
     def insert_houses(self, city):
         self.db_connect()
         community_list = self.abuilder.table(f'{city}_community').field("id, count, name, district").query()
-        for community_ in tqdm(community_list, desc=f"遍历{city}市的{len(community_list)}个小区......"):
+        for community_ in tqdm(community_list, desc=f"{city}市 {len(community_list)}个小区 房子数据插入数据表中......"):
             community_name = community_['name']
             # 加载cache
             if self.cache_enable and community_name in self.cache['inserted_communities']:
