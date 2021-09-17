@@ -12,6 +12,5 @@ class LianJiaSqliteTask(object):
         downloader.insert_houses(city)
 
 
-
 if __name__ == '__main__':
     LianJiaSqliteTask.run()

@@ -2,7 +2,7 @@ requests==2.23.0
 numpy~=1.19.5
 tqdm==4.62.1
 PyMySQL==1.0.2
-pyecharts~=1.9.0
-simplejson-3.17.5
+branca-0.4.2
+folium-0.12.1
 cryptography
 a-sqlbuilder
