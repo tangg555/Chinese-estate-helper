@@ -5,7 +5,6 @@ MySQL链式操作工具
 https://github.com/lizhenggan/ABuilder
 """
 
-import os
 from ABuilder.ABuilder import ABuilder
 from src.modules.views.map_view import MapView
 from src.modules.lianjia.houses import House, HouseList
@@ -19,13 +18,13 @@ class BasicTask(object):
         city = "上海"
         data = ABuilder().table(f'{city}_district').query()
         districts = cls.list_to_districts(data, city)
-        MapView.districts_draw(city, districts)
 
         data = ABuilder().table(f'{city}_district').where({'name': ['=', '闵行']}).query()
         district = cls.list_to_districts(data, city).districts[0]
         data = ABuilder().table(f'{city}_community').where({'district': ['=', '闵行']}).query()
         communities = cls.list_to_communities(data, city)
-        MapView.communitiess_draw(city, district, communities)
+
+        MapView.d_communities_draw(city, district, districts, communities)
 
     @classmethod
     def dict_to_house(cls, result: dict, city: str):

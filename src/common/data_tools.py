@@ -1,12 +1,22 @@
+"""
+@Reference:
+根据经纬度坐标计算距离-python
+https://www.cnblogs.com/andylhc/p/9481636.html
+"""
+
+from geopy.distance import geodesic
 from .string_tools import StringTools
+from src.modules.gaode_api import GaodeApi
+from math import radians, cos, sin, asin, sqrt
 
 
 class DataTools(object):
-
-
-    '''
-    ============================ filters ============================
-    '''
+    @classmethod
+    def cal_distance(cls, subj_lat, subj_lng, obj_lat, obj_lng):
+        """
+        单位：km
+        """
+        return geodesic((subj_lat, subj_lng), (obj_lat, obj_lng)).km
 
     @classmethod
     def containing_filter(cls, class_type: type, obj_list: list, attr: str, keyword: str):

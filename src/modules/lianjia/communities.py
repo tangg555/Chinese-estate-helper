@@ -19,6 +19,7 @@ class Community(object):
         self.latitude = community_['latitude']
         self.unit_price = community_['unit_price']
         self.count = community_['count']
+        self.distance_to_point = 0
 
     def __repr__(self):
         return f'{self.city}市 {self.district}区 {self.name}小区 '

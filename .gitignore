@@ -6,9 +6,10 @@ download
 toy
 cache
 database
-mysql_cfg.py
+configuration
 database.py
 toy.py
 my_task.py
+tasks/view
 *.pyc
 __pycache__
