@@ -27,13 +27,7 @@
 
 ![](/images/excel本地存储.png)
 
-部分为互动界面，可以直接打开[images](/imagesl)目录下的html文件：
-
-![](/images/上海_闵行_d_communities_draw.html)
-
-![](/images/上海_闵行_communities_draw.html)
-
-![](/images/上海_districts_draw.html)
+部分为互动界面，可以直接打开[images](/imagesl)目录下的html文件.
 
 ## 安装教程
 如果只是需要下载链家二手房数据的话，只需要执行步骤1和2即可。
