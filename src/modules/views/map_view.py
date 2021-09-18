@@ -35,6 +35,7 @@ class MapView(object):
 
     @classmethod
     def show(cls, folium_map: folium.Map, render_path: str):
+        os.makedirs(os.path.dirname(render_path), exist_ok=True)
         folium_map.save(render_path)
         webbrowser.open(os.path.abspath(render_path))
 
@@ -118,7 +119,7 @@ class MapView(object):
         # 展示地图中心位置和半径
         if circle_radius > 0:
             # 标明中心
-            popup = folium.Popup(cls.parse_zhch(f'地图中心 threshold:{circle_radius}'), show=True)
+            popup = folium.Popup(cls.parse_zhch(f'地图中心 范围:{circle_radius}公里内'), show=True)
             folium.Marker(map_location,
                           popup=popup,
                           tooltip=cls.parse_zhch(f'小区个数:{len(communities)}'),
