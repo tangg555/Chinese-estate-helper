@@ -6,3 +6,5 @@ branca
 folium
 cryptography
 a-sqlbuilder
+folium
+geopy

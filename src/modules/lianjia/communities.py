@@ -1,11 +1,10 @@
 """
 @Desc:
 """
-
+import os
 from src.modules.logger import MyLogger
-from src.common.string_tools import StringTools
 from src.common.data_tools import DataTools
-
+import xlwt
 
 class Community(object):
     _class_name = "Community"
@@ -39,6 +38,31 @@ class CommunityList(object):
 
     def add_logger(self, logger: MyLogger):
         self.logger = logger
+
+    def store(self,
+              sheet_name : str = 'communities',
+              local_path: str = './local_store/communities.xls'):
+        if not os.path.exists(os.path.dirname(local_path)):
+            os.makedirs(os.path.dirname(local_path))
+            if self.logger:
+                self.logger.warning(f'{os.path.abspath(os.path.dirname(local_path))} 不存在，现已创建')
+        workbook = xlwt.Workbook()
+        # 获取第一个sheet页
+        sheet = workbook.add_sheet(sheet_name)
+        # 头部
+        headers = ["id", "名字", "均价", "房子数量", "到目标点距离"]
+        for row in range(0, len(headers)):
+            sheet.write(0, row, headers[row])
+        # 写入小区信息
+        for row, community in enumerate(self.communities):
+            sheet.write(row + 1, 0, community.id)
+            sheet.write(row + 1, 1, community.name)
+            sheet.write(row + 1, 2, community.unit_price)
+            sheet.write(row + 1, 3, community.count)
+            sheet.write(row + 1, 4, community.distance_to_point)
+        workbook.save(local_path)
+        if self.logger:
+            self.logger.info(f'{len(self.communities)}个小区的数据已经载入{os.path.abspath(local_path)}')
 
     '''
     ============================ filters ============================

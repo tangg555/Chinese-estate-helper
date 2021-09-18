@@ -11,5 +11,6 @@ database.py
 toy.py
 my_task.py
 tasks/view
+tasks/local_store
 *.pyc
 __pycache__

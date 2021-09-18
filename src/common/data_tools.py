@@ -6,8 +6,6 @@ https://www.cnblogs.com/andylhc/p/9481636.html
 
 from geopy.distance import geodesic
 from .string_tools import StringTools
-from src.modules.gaode_api import GaodeApi
-from math import radians, cos, sin, asin, sqrt
 
 
 class DataTools(object):

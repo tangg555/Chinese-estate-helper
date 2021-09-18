@@ -36,7 +36,12 @@ class MyTask(BasicTask):
         communities = cls.cm_filter_by_dist(communities, threshold)
         print(f'范围{threshold}公里内过滤')
 
-        MapView.d_communities_draw(city, district, districts, communities, map_location=my_house_locations, circle_radius=threshold)
+        # 储存本地数据
+        communities.store(sheet_name=f'{city}市_{district.name}区',
+                          local_path=f'./local_store/{city}市_{district.name}区_漕河泾.xls')
+        MapView.d_communities_draw(city, district, districts, communities,
+                                   map_location=my_house_locations,
+                                   circle_radius=threshold)
 
     @classmethod
     def cal_dist_for_communities(cls, subj_locations, communities: CommunityList):
