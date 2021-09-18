@@ -3,7 +3,7 @@
 [![License: GPL](https://img.shields.io/badge/License-GPL-yellow.svg)](https://opensource.org/licenses/GPL)
 
 ## 介绍
-本项目用于爬取[链家](https://sh.lianjia.com/ditu/) 的二手房数据，进行数据分析和展示，以供买房参考。
+本项目用于爬取 [链家](https://sh.lianjia.com/ditu/) 的二手房数据，进行数据分析和展示，以供买房参考。
 
 本项目目前可以达到如下目的，更多效果目前懒得开发：
 
@@ -29,11 +29,11 @@
 
 部分为互动界面，可以直接点开链接：
 
-![](/images/上海_闵行_d_communities_draw.html)
+[](/images/上海_闵行_d_communities_draw.html)
 
-![](/images/上海_闵行_communities_draw.html)
+[](/images/上海_闵行_communities_draw.html)
 
-![](/images/上海_districts_draw.html)
+[](/images/上海_districts_draw.html)
 
 ## 安装教程
 如果只是需要下载链家二手房数据的话，只需要执行步骤1和2即可。
@@ -85,7 +85,7 @@ class GaodeApiCFG(object):
 
 ## 使用说明
 
-代码的![tasks](tasks)目录底下为相关的代码，
+代码的[tasks](tasks)目录底下为相关的代码，
 
 - ```tasks/lianjia_sqlite_task.py```：下载链家二手房数据，存入本地sqlite3数据库中。
 - ```tasks/lianjia_mysql_task.py```：下载链家二手房数据，存入本地MySQL数据库中。
@@ -96,8 +96,6 @@ class GaodeApiCFG(object):
 #### 1.基于[Lianjia](https://github.com/xjkj123/Lianjia) 的链家二手房数据爬取。
 **LianJiaSpider速度一分钟1000+**
 + 利用[此网页](https://sh.lianjia.com/ditu/)接口实现功能 
-+ 目前支持的城市 上海 北京 广州 深圳 烟台 厦门 长沙 郑州 请把你需要的城市发为Issues我会时常看
-+ 作者：Mrx ；WeChat：xwk245776832 ； 邮箱：xjkj123@icloud.com 有任何问题请发邮件 我会尽可能帮助你
 + 此接口通过网页js脚本计算出get所需参数，攻破了此难点，接口调用次数无限，速度不限，上海市100000+数据不会被反爬
 
 #### 2.基于[MySQL数据库](https://dev.mysql.com/downloads/mysql/) 本地存储数据。
