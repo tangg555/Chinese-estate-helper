@@ -85,6 +85,13 @@ class GaodeApiCFG(object):
 - ```tasks/lianjia_mysql_task.py```：下载链家二手房数据，存入本地MySQL数据库中。
 - ```tasks/basic_task.py```和```tasks/search_communities.py```：对二手房数据进行数据分析和可视化。
 
+运行时需要切入```tasks```目录，例如：
+
+```
+cd tasks
+python search_communities.py
+```
+
 ## 主要功能
 
 #### 1.基于[Lianjia](https://github.com/xjkj123/Lianjia) 的链家二手房数据爬取。
