@@ -4,6 +4,8 @@
 MySQL链式操作工具
 https://github.com/lizhenggan/ABuilder
 """
+import sys
+sys.path.insert(0, '..') # 在tasks文件夹中可以直接运行程序
 
 from ABuilder.ABuilder import ABuilder
 from src.modules.views.map_view import MapView
